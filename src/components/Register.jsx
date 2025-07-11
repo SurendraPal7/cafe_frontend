@@ -4,11 +4,12 @@ import axios from "axios";
 export default function Register() {
   const [user, setUser] = useState({});
   const [error, setError] = useState("");
+  const API = import.meta.env.VITE_API_URL;
 
   const handleSubmit = async () => {
     try {
-    //   const url = "http://localhost:8000/api/users/register";
-          const url = "https://cafe-backend-pearl.vercel.app/api/users/register";
+      const url = `${API}/api/users/register`;
+        //   const url = "https://cafe-backend-pearl.vercel.app/api/users/register";
 
       const result = await axios.post(url, user);
       setError("Data submitted successfully");

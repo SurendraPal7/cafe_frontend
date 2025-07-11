@@ -5,6 +5,7 @@ import './App.css'
 import Home from './components/Home.jsx'
 import Temp from './components/Temp.jsx'
 import Register from './components/Register.jsx'
+import Login from './components/Login.jsx'
 function App() {
   const [count, setCount] = useState(0)
 
@@ -16,6 +17,7 @@ function App() {
 
        <h1>Frontend Cafe</h1>
        <Register/>
+       {/* <Login/> */}
        <h3>@2025 All right reserve</h3>
 
 
