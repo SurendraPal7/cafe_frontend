@@ -1,10 +1,14 @@
 import React from 'react'
 import { useState } from "react";
 import axios from "axios";
+import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 export default function Login() {
 const[user,setUser]=useState({});
 const[error,setError]=useState("");
+const navigate= useNavigate();
+
 const handleLogin=()=>{
     const url="http://localhost:8000/api/users/login";   
 // const url="https://cafe-backend-pearl.vercel.app/api/users/login";
@@ -13,6 +17,7 @@ const handleLogin=()=>{
     axios.post(url,user).then((res)=>{
         console.log(res);
         setError("Login successful");
+        navigate("/");
     })
     .catch((err)=>{
         console.log(err);
@@ -39,6 +44,8 @@ const handleLogin=()=>{
             <input type="password" placeholder="Password" onChange={(e)=>setUser({...user, password: e.target.value})} />
             </p>
         <button onClick={handleLogin}>Login</button>
+        <hr />
+        <Link to ="/register">Create Account</Link>
     </div>
   )
 }
