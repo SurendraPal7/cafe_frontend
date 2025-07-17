@@ -8,9 +8,11 @@ export default function Login() {
 const[user,setUser]=useState({});
 const[error,setError]=useState("");
 const navigate= useNavigate();
+const API_URL = import.meta.env.VITE_API_URL;
 
 const handleLogin=()=>{
-    const url="http://localhost:8000/api/users/login";   
+    const url=`${API_URL}/api/users/login`;
+    // const url="http://localhost:8000/api/users/login";   
 // const url="https://cafe-backend-pearl.vercel.app/api/users/login";
     // const url=import.meta.env.VITE_API_URL+"/api/users/login";
     // const url=`${import.meta.env.VITE_API_URL}/api/users/login`;

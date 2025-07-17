@@ -22,6 +22,7 @@ function App() {
          <Link to="/order">MyOrder</Link>-
           <Link to="/admin">Admin</Link>-
            <Link to="/login">Login</Link>
+           
         <Routes>
           <Route index element={<Product />} />
           <Route path="register" element={<Register />} />
@@ -33,6 +34,7 @@ function App() {
             <Route path="products" element={<Products />} />
             <Route path="orders" element={<Orders />} />
           </Route>
+
         </Routes>
         <h3>This is Footer</h3>
       </BrowserRouter>

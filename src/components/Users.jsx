@@ -15,6 +15,8 @@ export default function Users() {
   const [limit, setLimit] = useState(3);
   const [loading, setLoading] = useState(false);
   const [editId, setEditId] = useState(null);
+    const API_URL = import.meta.env.VITE_API_URL;
+
   const formRef = useRef();
   const [form, setForm] = useState({
     firstname: "",
@@ -29,7 +31,7 @@ export default function Users() {
 
   const fetchUsers = async () => {
     try {
-      const url = `http://localhost:8000/api/users/showusers/?page=${page}&limit=${limit}&search=${searchVal}`;
+      const url = `${API_URL}/api/users/showusers/?page=${page}&limit=${limit}&search=${searchVal}`;
       const result = await axios.get(url);
       setUsers(result.data.users);
       setTotalPages(result.data.total);
@@ -45,7 +47,7 @@ export default function Users() {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:8000/api/users/${id}`);
+      await axios.delete(`${API_URL}/api/users/${id}`);
       setError("User deleted successfully");
       fetchUsers();
     } catch (err) {
@@ -57,7 +59,7 @@ export default function Users() {
   const handleAdd = async (e) => {
     e.preventDefault();
     try {
-      const url = "http://localhost:8000/api/users/addusers";
+      const url = `${API_URL}/api/users/addusers`;
       await axios.post(url, form);
       setError("User added successfully");
       resetForm();
@@ -91,7 +93,7 @@ export default function Users() {
       return;
     }
     try {
-      const url = `http://localhost:8000/api/users/${editId}`;
+      const url = `${API_URL}/api/users/${editId}`;
       await axios.patch(url, form);
       setError("User details modified successfully.");
       resetForm();
