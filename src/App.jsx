@@ -10,7 +10,7 @@ import Users from "./components/Users";
 import Orders from "./components/Orders";
 import Header from "./components/Header";
 import Profile from "./components/Profile";
-import Footer from "./components/Footer";
+// import Footer from "./components/Footer";
 import Login from "./components/Login";
 import Products from "./components/Products";
 import { BrowserRouter, Route, Routes, Link } from "react-router-dom";
@@ -37,7 +37,7 @@ function App() {
               <Route path="orders" element={<Orders />} />
             </Route>
           </Routes>
-          <Footer />
+          {/* <Footer /> */}
         </BrowserRouter>
       </AppContext.Provider>
     </div>
