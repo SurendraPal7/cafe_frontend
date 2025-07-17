@@ -1,48 +1,44 @@
-import React from 'react'
-import { useState } from 'react'
-import axios from 'axios'
-
+import React, { useEffect, useState, useContext } from "react";
+import axios from "axios";
+import { AppContext } from "../App";
 export default function Product() {
-  const [product, setProduct] =useState({})
-  const [error, setError] = useState("");
   const API_URL = import.meta.env.VITE_API_URL;
-
-  const handleadd= async()=>{
-    try{
-          const url=`${API_URL}/api/products/addPro`;
-
-    // const url= "http://localhost:8000/api/products/addPro"
-    const result= await axios.post(url,product);
-    setError("Product added succesfully");
+  const [products, setProducts] = useState([]);
+  const [error, setError] = useState();
+  const { user, cart, setCart } = useContext(AppContext);
+  const fetchProducts = async () => {
+    try {
+      const url = `${API_URL}/api/products/all`;
+      const result = await axios.get(url);
+      setProducts(result.data.products);
+    } catch (err) {
+      console.log(err);
+      setError("Something went wrong");
     }
-    catch(err){ 
-      setError("Error adding product");
+  };
+  useEffect(() => {
+    fetchProducts();
+  }, []);
 
+  const addToCart = (product) => {
+    const found = cart.find((item) => item._id === product._id);
+    if (!found) {
+      product.qty = 1;
+      setCart([...cart, product]);
     }
-  }
-
+  };
   return (
     <div>
-      <h1>Add Products</h1>
-        {error && <p>{error}</p>}
-      <div>
-        <p>
-        <input type="text" placeholder='Product name'  onChange={(e)=>setProduct({...product, productName: e.target.value})}/>
-      </p>
-      <p>
-        <input type="text" placeholder='Enter Description' onChange={(e)=>setProduct({...Product,description: e.target.value})} />
-      </p>
-      <p>
-        <input type="number" placeholder='Price' onChange={(e)=>setProduct({...product, price: e.target.value})} />
-      </p>
-      <p>
-        <input type="text" placeholder='image url' onChange={(e)=>setProduct({...product , imgUrl: e.target.value})} />
-      </p>
-      </div>
-      <p>
-      <button onClick={handleadd}>Add Products</button>
-
-      </p>
-      </div>
-  )
+      {products &&
+        products.map((product) => (
+          <div key={product._id}>
+            <img src={product.imgUrl} width={100}/>
+            <h3>{product.productName}</h3>
+            <p>{product.description}</p>
+            <h4>{product.price}</h4>
+            <button onClick={() => addToCart(product)}>Add to Cart</button>
+          </div>
+        ))}
+    </div>
+  );
 }
