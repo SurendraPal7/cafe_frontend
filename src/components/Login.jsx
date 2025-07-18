@@ -34,6 +34,11 @@ const handleLogin=()=>{
     <div>
         <h1>Login</h1>
         {error && <p>{error}</p>}
+        {/* i want to display the firstname after login */}
+        
+        
+
+
         
 
         <p>
