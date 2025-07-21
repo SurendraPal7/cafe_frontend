@@ -1,9 +1,7 @@
-import React from "react";
-import { useEffect, useState } from "react";
-import { useRef } from "react";
-import { useContext } from "react";
+import React, { useEffect, useState, useRef, useContext } from "react";
 import { AppContext } from "../App";
 import axios from "axios";
+
 export default function Users() {
   const [users, setUsers] = useState([]);
   const { user } = useContext(AppContext);
@@ -22,6 +20,7 @@ export default function Users() {
   const [limit, setLimit] = useState(2);
   const [editId, setEditId] = useState();
   const API_URL = import.meta.env.VITE_API_URL;
+
   const fetchUsers = async () => {
     try {
       setError("Loading...");
@@ -39,13 +38,15 @@ export default function Users() {
       setError("Something went wrong");
     }
   };
+
   useEffect(() => {
     fetchUsers();
   }, [page]);
+
   const handleDelete = async (id) => {
     try {
       const url = `${API_URL}/api/users/${id}`;
-      const result = await axios.delete(url, {
+      await axios.delete(url, {
         headers: {
           Authorization: `Bearer ${user.token}`,
         },
@@ -71,12 +72,12 @@ export default function Users() {
     }
     try {
       const url = `${API_URL}/api/users`;
-      const result = await axios.post(url, form, {
+      await axios.post(url, form, {
         headers: {
           Authorization: `Bearer ${user.token}`,
         },
       });
-      setError("User added succesfully");
+      setError("User added successfully");
       fetchUsers();
       resetForm();
     } catch (err) {
@@ -88,7 +89,6 @@ export default function Users() {
   const handleEdit = (user) => {
     setEditId(user._id);
     setForm({
-      ...form,
       firstName: user.firstName,
       lastName: user.lastName,
       email: user.email,
@@ -106,7 +106,7 @@ export default function Users() {
     }
     try {
       const url = `${API_URL}/api/users/${editId}`;
-      const result = await axios.patch(url, form, {
+      await axios.patch(url, form, {
         headers: {
           Authorization: `Bearer ${user.token}`,
         },
@@ -128,7 +128,6 @@ export default function Users() {
 
   const resetForm = () => {
     setForm({
-      ...form,
       firstName: "",
       lastName: "",
       email: "",
@@ -136,112 +135,160 @@ export default function Users() {
       role: "",
     });
   };
-  return (
-    <div>
-      <h2>User Management</h2>
-      {error}
-      <div>
-        <form ref={frmRef}>
-          <input
-            name="firstName"
-            value={form.firstName}
-            type="text"
-            placeholder="First Name"
-            onChange={handleChange}
-            required
-          />
-          <input
-            name="lastName"
-            value={form.lastName}
-            type="text"
-            placeholder="Last Name"
-            onChange={handleChange}
-            required
-          />
-          <input
-            name="email"
-            value={form.email}
-            type="text"
-            placeholder="Email Address"
-            onChange={handleChange}
-            required
-          />
-          <input
-            name="password"
-            value={form.password}
-            type="password"
-            placeholder="New Password"
-            onChange={handleChange}
-            required
-          />
-          <select
-            name="role"
-            value={form.role}
-            required
-            onChange={handleChange}
-          >
-            <option value="">--Select Role--</option>
-            <option value="user">User</option>
-            <option value="admin">Admin</option>
-          </select>
-          {/* <input
-            name="role"
-            value={form.role}
-            type="text"
-            onChange={handleChange}
-            placeholder="Role"
-          /> */}
 
-          {editId ? (
-            <>
-              <button onClick={handleUpdate}>Update</button>
-              <button onClick={handleCancel}>Cancel</button>
-            </>
-          ) : (
-            <button onClick={handleAdd}>Add</button>
-          )}
-        </form>
+  return (
+    <div className="p-6 max-w-6xl mx-auto">
+      <h2 className="text-2xl font-bold mb-4">User Management</h2>
+      {error && <p className="text-red-500 mb-4">{error}</p>}
+
+      <form ref={frmRef} className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+        <input
+          name="firstName"
+          value={form.firstName}
+          type="text"
+          placeholder="First Name"
+          onChange={handleChange}
+          className="border px-4 py-2 rounded-md"
+          required
+        />
+        <input
+          name="lastName"
+          value={form.lastName}
+          type="text"
+          placeholder="Last Name"
+          onChange={handleChange}
+          className="border px-4 py-2 rounded-md"
+          required
+        />
+        <input
+          name="email"
+          value={form.email}
+          type="text"
+          placeholder="Email Address"
+          onChange={handleChange}
+          className="border px-4 py-2 rounded-md"
+          required
+        />
+        <input
+          name="password"
+          value={form.password}
+          type="password"
+          placeholder="Password"
+          onChange={handleChange}
+          className="border px-4 py-2 rounded-md"
+          required
+        />
+        <select
+          name="role"
+          value={form.role}
+          onChange={handleChange}
+          className="border px-4 py-2 rounded-md"
+          required
+        >
+          <option value="">--Select Role--</option>
+          <option value="user">User</option>
+          <option value="admin">Admin</option>
+        </select>
+      </form>
+
+      <div className="flex gap-4 mb-6">
+        {editId ? (
+          <>
+            <button
+              onClick={handleUpdate}
+              className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md"
+            >
+              Update
+            </button>
+            <button
+              onClick={handleCancel}
+              className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-md"
+            >
+              Cancel
+            </button>
+          </>
+        ) : (
+          <button
+            onClick={handleAdd}
+            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md"
+          >
+            Add
+          </button>
+        )}
       </div>
-      <div>
-        <input type="text" onChange={(e) => setSearchVal(e.target.value)} />
-        <button onClick={() => fetchUsers()}>Search</button>
+
+      <div className="mb-6 flex items-center gap-4">
+        <input
+          type="text"
+          onChange={(e) => setSearchVal(e.target.value)}
+          placeholder="Search..."
+          className="border px-4 py-2 rounded-md"
+        />
+        <button
+          onClick={() => fetchUsers()}
+          className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md"
+        >
+          Search
+        </button>
       </div>
-      <div>
-        <table border="1">
-          <thead>
-            <tr>
-              <th>First Name</th>
-              <th>Last Name</th>
-              <th>Email Address</th>
-              <th>Role</th>
-            </tr>
-          </thead>
+
+      <table className="w-full border text-left">
+        <thead>
+          <tr className="bg-gray-100">
+            <th className="border p-2">First Name</th>
+            <th className="border p-2">Last Name</th>
+            <th className="border p-2">Email</th>
+            <th className="border p-2">Role</th>
+            <th className="border p-2">Action</th>
+          </tr>
+        </thead>
+        <tbody>
           {users.map((value) => (
-            <tbody key={value._id}>
-              <tr>
-                <td>{value.firstName}</td>
-                <td>{value.lastName}</td>
-                <td>{value.email}</td>
-                <td>{value.role}</td>
-                <td>
-                  <button onClick={() => handleEdit(value)}>Edit</button>
-                  <button onClick={() => handleDelete(value._id)}>
-                    Delete
-                  </button>
-                </td>
-              </tr>
-            </tbody>
+            <tr key={value._id} className="border-t">
+              <td className="border p-2">{value.firstName}</td>
+              <td className="border p-2">{value.lastName}</td>
+              <td className="border p-2">{value.email}</td>
+              <td className="border p-2">{value.role}</td>
+              <td className="border p-2">
+                <button
+                  onClick={() => handleEdit(value)}
+                  className="bg-yellow-500 hover:bg-yellow-600 text-white px-2 py-1 rounded-md mr-2"
+                >
+                  Edit
+                </button>
+                <button
+                  onClick={() => handleDelete(value._id)}
+                  className="bg-red-600 hover:bg-red-700 text-white px-2 py-1 rounded-md"
+                >
+                  Delete
+                </button>
+              </td>
+            </tr>
           ))}
-        </table>
-      </div>
-      <div>
-        <button disabled={page === 1} onClick={() => setPage(page - 1)}>
+        </tbody>
+      </table>
+
+      <div className="mt-6 flex gap-4 items-center">
+        <button
+          disabled={page === 1}
+          onClick={() => setPage(page - 1)}
+          className={`px-4 py-2 rounded-md ${
+            page === 1 ? "bg-gray-300" : "bg-blue-600 hover:bg-blue-700 text-white"
+          }`}
+        >
           Previous
         </button>
-        Page {page} of {totalPages}
+        <span>
+          Page {page} of {totalPages}
+        </span>
         <button
           disabled={page === totalPages}
           onClick={() => setPage(page + 1)}
+          className={`px-4 py-2 rounded-md ${
+            page === totalPages
+              ? "bg-gray-300"
+              : "bg-blue-600 hover:bg-blue-700 text-white"
+          }`}
         >
           Next
         </button>

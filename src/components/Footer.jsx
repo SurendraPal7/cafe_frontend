@@ -1,7 +1,9 @@
-import React from 'react'
+import React from 'react';
 
 export default function Footer() {
   return (
-    <div> <h3>This is footer</h3></div>
-  )
+    <footer className="w-full bg-gray-800 text-white text-center py-4 mt-10">
+      <h3 className="text-lg font-medium">© 2025 Your Cafe. All rights reserved.</h3>
+    </footer>
+  );
 }
